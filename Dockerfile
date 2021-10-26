@@ -15,6 +15,5 @@ RUN npm ci --only=production
 # Bundle app source
 COPY . .
 ENV APP_ENV=PRODUCTION
-ENV APP_PORT=3000
 EXPOSE 8080
 CMD [ "node", "src/main.js" ]
