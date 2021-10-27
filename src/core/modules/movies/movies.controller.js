@@ -53,6 +53,9 @@ class MoviesController{
 
         const movies = await new MovieService().list(options, genre);
 
+        if(!movies.length && page > 1){
+            page = page -1;
+        }
         return responseHandler({
             message : "Movies are fetched successfully",
             data: {
