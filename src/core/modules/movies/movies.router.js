@@ -8,6 +8,7 @@ const moviesRouterPublic = Router();
 const moviesRouterProtected = Router();
 
 moviesRouterPublic.get('/',requestHandler(MovieController.index));
+moviesRouterPublic.get('/genre', requestHandler(MovieController.listGenre));
 moviesRouterPublic.get('/:id',requestHandler(MovieController.show));
 
 moviesRouterProtected.use(passport.authenticate('jwt', {session : false}));

@@ -1,6 +1,7 @@
 const MovieService = require("./movies.service");
 const {responseHandler} = require("../../untils/ResponseHandler");
 const {CustomError} = require("../../untils/CustomError");
+const {GenresService} = require("./genres");
 
 class MoviesController{
    static async create(request, response){
@@ -107,6 +108,15 @@ class MoviesController{
             message : "Movie deleted successfully",
             statusCode: 200
         }, response);
+    }
+
+    static async listGenre(request, response){
+       const genreList = await new GenresService().list();
+       return responseHandler({
+           message: "Genre list fetched successfully",
+           data: genreList,
+           statusCode: 200
+       }, response);
     }
 }
 
