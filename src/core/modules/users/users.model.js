@@ -2,6 +2,7 @@ const {Schema, model} = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Hash = require("../../untils/Hash");
 const {config} = require("../../../config");
+const {CustomError} = require("../../untils/CustomError");
 
 const USER_TYPES = {
     ADMIN: 'ADMIN',
@@ -37,7 +38,7 @@ UserSchema.pre('save', async function (next){
 UserSchema.methods.authenticate = async function (reqPassword){
     const match = await Hash.compare(reqPassword, this.password);
     if(!match){
-        throw new Error("Authentication Failed")
+        throw new CustomError("Unauthorized", 401)
     }
     return this.generateToken();
 }
