@@ -51,7 +51,7 @@ class MoviesService{
     async update(id, {director, genre, popularity, imdb_score}, session_user){
         const movie = await this.get(id);
         if(!movie){
-            throw new Error("NO movie found with this ID");
+            throw new CustomError("NO movie found with this ID", 404);
         }
         await new GenresService().addIfNoExistsBulk(genre);
         movie.director = director;

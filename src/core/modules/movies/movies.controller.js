@@ -72,6 +72,7 @@ class MoviesController{
         const {id} = request.params;
         if(!id) throw new CustomError("Invalid movie");
         const movie = await new MovieService().get(id);
+        if(!movie) throw new CustomError("No movie found", 404);
         return responseHandler({
             message : "Movies fetched successfully",
             data: movie,
