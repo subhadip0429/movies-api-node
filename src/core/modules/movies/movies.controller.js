@@ -2,8 +2,81 @@ const MovieService = require("./movies.service");
 const {responseHandler} = require("../../untils/ResponseHandler");
 const {CustomError} = require("../../untils/CustomError");
 const {GenresService} = require("./genres");
-
+/**
+ * @swagger
+ * tags:
+ *   name: Movies
+ *   description: Movies Management
+ */
+/**
+ * @swagger
+ * definitions:
+ *   Movie:
+ *     required:
+ *       - name
+ *       - director
+ *       - genre
+ *       - popularity
+ *       - imdb_score
+ *     properties:
+ *       _id:
+ *         type: string
+ *       name:
+ *         type: string
+ *       director:
+ *         type: string
+ *       genre:
+ *         type: array
+ *         items:
+ *            type: string
+ *       popularity:
+ *         type: number
+ *       imdb_score:
+ *         type: number
+ */
+/**
+ * @swagger
+ * definitions:
+ *   Genre:
+ *     required:
+ *       - name
+ *     properties:
+ *       name:
+ *         type: string
+ *       _id:
+ *          type: string
+ */
 class MoviesController{
+
+    /**
+     * @swagger
+     * /movies:
+     *   post:
+     *       description: Add a new movie
+     *       tags: [Movies]
+     *       produces:
+     *        - application/json
+     *       parameters:
+     *          - in: header
+     *            name: Bearer token
+     *            type: string
+     *            default: Bearer <YOUR_TOKEN>
+     *          - in: body
+     *            name: Movie
+     *            schema:
+     *              type: object
+     *              $ref: '#/definitions/Movie'
+     *
+     *       responses:
+     *           '201':
+     *               description: Movie added successfully
+     *               schema:
+     *                  type: object
+     *                  $ref: '#/definitions/Movie'
+     *
+     *
+     *
+     */
    static async create(request, response){
         const {name, director, genre, popularity, imdb_score} = request.body;
         const session_user = request.user;
@@ -28,6 +101,54 @@ class MoviesController{
         }, response);
     }
 
+    /**
+     * @swagger
+     * /movies:
+     *   get:
+     *       description: Get list of movies
+     *       tags: [Movies]
+     *       produces:
+     *        - application/json
+     *       parameters:
+     *            - in: query
+     *              name: search_text
+     *              type: string
+     *              description: Search Query
+     *            - in: query
+     *              name: genre
+     *              type: string
+     *              description: Coma separated genre list
+     *            - in: query
+     *              name: sort_by
+     *              type: string
+     *              description: Supported parameters name popularity director
+     *              default: popularity
+     *            - in: query
+     *              name: order_by
+     *              type: string
+     *              description: supported
+     *              default: ASC
+     *              enum: [ASC, DESC]
+     *            - in: query
+     *              name: limit
+     *              type: number
+     *              description: Page size
+     *              default: 20
+     *            - in: query
+     *              name: page
+     *              type: number
+     *              description: Page number
+     *              default: 1
+     *
+     *       responses:
+     *           '200':
+     *               description: Movie list fetched successfully
+     *               schema:
+     *                  type: array
+     *                  items:
+     *                    $ref: '#/definitions/Movie'
+     *
+     */
     static async index(request, response){
        let {search_text:searchText, limit, page, sort_by:sortBy, order_by:orderBy, genre}  = request.query;
        let options = {};
@@ -68,6 +189,30 @@ class MoviesController{
         }, response);
     }
 
+    /**
+     * @swagger
+     * /movies/{movie_id}:
+     *   get:
+     *       description: Get movie details by ID
+     *       tags: [Movies]
+     *       produces:
+     *        - application/json
+     *       parameters:
+     *         - in: path
+     *           name: movie_id
+     *           schema:
+     *             type: string
+     *           required: true
+     *           description: ID of the movie
+     *
+     *       responses:
+     *           '200':
+     *               description: Movie details fetched successfully
+     *               schema:
+     *                  type: object
+     *                  $ref: '#/definitions/Movie'
+     *
+     */
     static async show(request, response){
         const {id} = request.params;
         if(!id) throw new CustomError("Invalid movie");
@@ -79,7 +224,42 @@ class MoviesController{
             statusCode: 200
         }, response);
     }
-
+    /**
+     * @swagger
+     * /movies/{movie_id}:
+     *   patch:
+     *       description: Update a movie
+     *       tags: [Movies]
+     *       produces:
+     *        - application/json
+     *       parameters:
+     *          - in: header
+     *            name: Bearer token
+     *            type: string
+     *            default: Bearer <YOUR_TOKEN>
+     *          - in: path
+     *            name: movie_id
+     *            required: true
+     *            description: ID of the movie
+     *            schema:
+     *               type: string
+     *          - in: body
+     *            name: Movie
+     *            description: Any property of the movie expect name can be updated
+     *            schema:
+     *              type: object
+     *              $ref: '#/definitions/Movie'
+     *
+     *       responses:
+     *           '201':
+     *               description: Movie updated successfully
+     *               schema:
+     *                  type: object
+     *                  $ref: '#/definitions/Movie'
+     *
+     *
+     *
+     */
     static async update(request, response){
         const {director, genre, popularity, imdb_score} = request.body;
         const {id} = request.params;
@@ -103,17 +283,57 @@ class MoviesController{
             statusCode: 200
         }, response);
     }
-
+    /**
+     * @swagger
+     * /movies/{movie_id}:
+     *   delete:
+     *       description: delete a movie by ID
+     *       tags: [Movies]
+     *       parameters:
+     *         - in: header
+     *           name: Bearer token
+     *           type: string
+     *           default: Bearer <YOUR_TOKEN>
+     *         - in: path
+     *           name: movie_id
+     *           schema:
+     *             type: string
+     *           required: true
+     *           description: ID of the movie
+     *
+     *       responses:
+     *           '204':
+     *               description: Movie deleted successfully
+     *
+     *
+     */
     static async remove(request, response){
         const {id} = request.params;
         if(!id) throw new CustomError("Invalid movie");
         await new MovieService().remove(id);
         return responseHandler({
             message : "Movie deleted successfully",
-            statusCode: 200
+            statusCode: 204
         }, response);
     }
-
+    /**
+     * @swagger
+     * /movies/genre:
+     *   get:
+     *       description: Get lis of saved Genres
+     *       tags: [Movies]
+     *       produces:
+     *        - application/json
+     *
+     *       responses:
+     *           '200':
+     *               description: Movie details fetched successfully
+     *               schema:
+     *                  type: array
+     *                  items:
+     *                     $ref: '#/definitions/Genre'
+     *
+     */
     static async listGenre(request, response){
        const genreList = await new GenresService().list();
        return responseHandler({
