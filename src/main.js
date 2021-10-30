@@ -16,8 +16,11 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(passport.initialize());
 passport.use(JWTStrategy());
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const options = {
+    customCss: '.swagger-ui .topbar { display: none } .scheme-container {display: none}',
+    customSiteTitle: "Movies API Docs",
+};
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
 app.use(Routes);
 

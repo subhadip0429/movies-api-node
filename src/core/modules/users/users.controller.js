@@ -128,7 +128,7 @@ class UsersController{
      *            name: Credentials
      *            schema:
      *              type: object
-     *              $ref: '#/definitions/Credentials'
+     *              $ref: '#/definitions/User Credentials'
      *
      *       responses:
      *           '200':
