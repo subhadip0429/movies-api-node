@@ -1,8 +1,11 @@
 {
   "name": "fynd-hiring-movie-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A Movie Library API Service",
+  "main": "main.js",
+  "engines": {
+    "node": ">=12.0.0 <15"
+  },
   "scripts": {
     "start": "node src/main.js",
     "start:dev": "nodemon src/main.js"

@@ -17,8 +17,6 @@ app.use(cors());
 app.use(passport.initialize());
 passport.use(JWTStrategy());
 
-console.log("doc", swaggerDocument)
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(Routes);
