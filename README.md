@@ -49,6 +49,13 @@ This exposes endpoints to manage movie DB with authorization implemented.
   - `npm start`
 - Great !!. Now you can visit [http://localhost:3000/api-docs](http://localhost:3000/api-docs) to verify.
 
+### Credentials
+
+- You can register a new user or just use the test one.
+- Registered Test user details are as follows
+  - Email: `admin@test.com`
+  - Password: `password`
+
 
 ## Scaling
 To scale this application we can do some changes in its architecture.
