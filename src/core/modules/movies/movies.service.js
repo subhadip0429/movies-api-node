@@ -34,8 +34,12 @@ class MoviesService{
         let query = Movie.find();
         const orderByValue = orderBy.toUpperCase() === 'DEC' ? -1 : 1;
         if(searchText){
-            query = Movie.find({$text : { $search : searchText}},{ score: { $meta : 'textScore'}})
-                .sort({ score: {$meta : 'textScore'}, [sortBy] : orderByValue});
+            // query = Movie.find({$text : { $search : searchText}},{ score: { $meta : 'textScore'}})
+            //     .sort({ score: {$meta : 'textScore'}, [sortBy] : orderByValue});
+            query = Movie.find({ $or: [
+                    { "name" : { $regex : searchText} },
+                    { "director" : { $regex : searchText} },
+                ] })
         } else if(filterGenresList.length){
             query.in('genre',filterGenresList)
                 .sort({ [sortBy] : orderByValue});

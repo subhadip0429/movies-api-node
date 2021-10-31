@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const {config} = require("../../config");
 const {connection_URI} = require("../../config/db");
 
-// mongoose.set('debug', true);
+mongoose.set('debug', true);
 
 module.exports = async function (){
     return new Promise((resolve, reject) => {
