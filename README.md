@@ -55,7 +55,6 @@ This exposes endpoints to manage movie DB with authorization implemented.
 - Registered Test user details are as follows
   - Email: `admin@test.com`
   - Password: `password`
-- A demo react app implementing this API can be found here [https://fynd-hiring-movie-react-app.herokuapp.com/](https://fynd-hiring-movie-react-app.herokuapp.com/)
 
 
 ## Scaling
